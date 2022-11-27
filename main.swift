@@ -1,44 +1,6 @@
-/*
-Shortest Transformation Sequences
-If the two words differ by a single letter, it is possible to transform one word into another. Given a start word, a target word, and a list of words, return all possible shortest transformations of the start word to the target word. Each subsequent word of the transformation must exist in the given list of words.
-
-Example One
-{
-"start_word": "hot",
-"target_word": "dog",
-"words": ["cat", "dog", "hat", "dot", "cot", "hog"]
-}
-Output:
-
-[
-["hot", "hog", "dog"],
-["hot", "dot", "dog"]
-]
-"hot" -> "hat" -> "cat" -> "cot" -> "dot" -> "dog" or "hot" -> "cot" -> "dot" -> "dog" are also two valid transformation sequences but they are not shortest.
-
-Example Two
-{
-"start_word": "hot",
-"target_word": "dog",
-"words": ["cat", "hat", "dot", "cot", "hog"]
-}
-Output:
-
-[
-]
-Notes
-Constraints:
-
-The length of all the words, including the start and target words, is the same.
-1 <= length of any word <= 5
-All the words consist of only lowercase English letters.
-1 <= size of the word list <= 2 * 104
-All the words from the word list are unique.
-The start word and the target word will always be different.
-*/
-
 func get_all_shortest_transformation_sequences(start_word: String, target_word: String, words: [String]) -> [[String]] {
     var result: [[String]] = []
+    var found = false
     var level = 0
     let words = Set(words)
     var slate: [String] = []
@@ -71,7 +33,6 @@ func get_all_shortest_transformation_sequences(start_word: String, target_word: 
     func bfs(_ root: String) {
         var queue: [String] = []
         queue.append(root)
-        var found = false
         
         while queue.count > 0, !found {
             let qc = queue.count
@@ -119,9 +80,12 @@ func get_all_shortest_transformation_sequences(start_word: String, target_word: 
     }
     
     bfs(start_word)
+    
+    guard found else { return [] }
+    
     dfs(target_word, &slate)
     
-    return result == [[]] ? [] : result
+    return result
 }
 
 extension String {
